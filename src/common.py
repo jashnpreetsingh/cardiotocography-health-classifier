@@ -13,7 +13,7 @@ from sklearn.metrics import (
 ROOT_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT_DIR / "data"
 MODEL_DIR = ROOT_DIR / "model"
-REPORT_DIR = ROOT_DIR / "reports"
+REPORT_DIR = ROOT_DIR / "files"
 
 RAW_DATA_PATH = DATA_DIR / "ctg_raw.csv"
 TRAIN_DATA_PATH = DATA_DIR / "train_data.csv"
