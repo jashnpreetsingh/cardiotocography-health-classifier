@@ -2,7 +2,7 @@
 
 ## a. Problem Statement
 
-The goal of this project is to predict whether a fetus is **Normal** or **At risk** using 21 cardiotocogram diagnostic features such as baseline heart rate, accelerations, uterine contractions and variability measurements. Five classification models are trained on this data and deployed in a Streamlit app, where you can upload the test CSV to see predictions and evaluation metrics without retraining the models.
+The goal of this project is to predict whether a fetus is **Normal** or **At risk** using 21 cardiotocogram (CTG) diagnostic features such as baseline heart rate, accelerations, uterine contractions and variability measurements. Five classification models are trained on this data and deployed in a Streamlit app, where you can upload the test CSV to see predictions and evaluation metrics without retraining the models.
 
 ## b. Dataset Description
 
@@ -58,14 +58,14 @@ All five models are trained on the same training split. Each is saved as a pipel
 
 ## e. Observations on Model Performance
 
-| ML Model Name                         | Observation about model performance                                                                                                                                                                                                                                                                                                                                               |
-| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Logistic Regression                   | Gets good recall (0.8602) because of balanced class weights, and a strong AUC because a few features like ASTV and ALTV separate the classes almost linearly. But precision is the lowest of all models at 0.6780: the simple linear boundary flags too many Normal cases as At risk (38 false alarms).                                                                           |
-| Decision Tree                         | Improves precision, F1 and MCC compared to Logistic Regression because the depth-6 tree picks up non-linear splits on features like ASTV, ALTV and DP. It misses only 10 of 93 at-risk cases. Its AUC (0.9533) is a little lower than the other strong models because a tree gives only a few distinct probability values (one per leaf), so it ranks cases more coarsely.        |
-| KNN                                   | Has the highest accuracy (0.9243) and precision (0.8861) with k=7, and the fewest false alarms (9). But recall drops to 0.7527, missing 23 at-risk cases, because KNN does not use class weights and the majority Normal class dominates the nearest neighbours.                                                                                                                  |
-| Naive Bayes                           | Worst performing model, with the lowest AUC, recall, F1 and MCC. It misses 28 of 93 at-risk cases. Gaussian Naive Bayes assumes all features are independent, which is not true here: the histogram features Mean, Mode, Median, Min and Max are heavily correlated, so the same information is counted several times.                                                            |
-| Support Vector Machine                | Best model overall, with the highest AUC, recall, F1 and MCC. It catches 89 of 93 at-risk cases and misses only 4. The RBF kernel on scaled features handles the non-linear boundary, and balanced class weights handle the imbalance. Its accuracy is slightly below KNN and the Decision Tree because it accepts more false alarms (30) in exchange for far fewer missed cases. |
-| **Overall, Winner for your dataset?** | **Support Vector Machine.** With 78% Normal cases, accuracy alone is misleading, and in fetal health screening missing an at-risk case is much worse than a false alarm. SVM has the highest recall (0.9570), F1 (0.8396), MCC (0.7977) and AUC (0.9782), so it is the most reliable model for this dataset.                                                                      |
+| ML Model Name                     | Observation about model performance                                                                                                                                                                        |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Logistic Regression               | Good recall (0.86) because of balanced class weights, but the lowest precision (0.68). The linear boundary flags many Normal cases as At risk.                                                             |
+| Decision Tree                     | Better precision, F1 and MCC than Logistic Regression, since it picks up non-linear patterns in features like ASTV and ALTV. Its AUC is lower because a tree gives only a few distinct probability values. |
+| KNN                               | Highest accuracy (0.92) and precision (0.89), but low recall (0.75). It doesn't use class weights, so the majority Normal class dominates the neighbours.                                                  |
+| Naive Bayes                       | Weakest model, with the lowest recall, F1 and MCC. It assumes features are independent, but features like Mean, Mode and Median are highly correlated.                                                     |
+| Support Vector Machine            | Best overall, with the highest AUC, recall, F1 and MCC. It misses only 4 of 93 at-risk cases.                                                                                                              |
+| Overall, Winner for your dataset? | Support Vector Machine. Missing an at-risk case is worse than a false alarm, and SVM has the best recall (0.96) and MCC (0.80).                                                                            |
 
 ## How to Run Locally
 
